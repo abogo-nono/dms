@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: Ingredient API
+  version: 1.0.0
+tags:
+  - name: Ingredients
+    description: Operations related to ingredients
+
+paths:
+  /ingredients:
+    get:
+      tags:
+        - Ingredients
+      summary: Get list of ingredients
+      responses:
+        200:
+          description: A list of ingredients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ingredients:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ingredient'
+    post:
+      tags:
+        - Ingredients
+      summary: Add a new ingredient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        201:
+          description: Ingredient created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ingredient:
+                    $ref: '#/components/schemas/Ingredient'
+        400:
+          description: Name is required
+
+  /ingredients/{ingredient_id}:
+    parameters:
+      - name: ingredient_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Ingredients
+      summary: Get an ingredient by ID
+      responses:
+        200:
+          description: Ingredient details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ingredient:
+                    $ref: '#/components/schemas/Ingredient'
+        404:
+          description: Ingredient not found
+    put:
+      tags:
+        - Ingredients
+      summary: Update an ingredient by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        201:
+          description: Ingredient updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ingredient:
+                    $ref: '#/components/schemas/Ingredient'
+        404:
+          description: Ingredient not found
+    delete:
+      tags:
+        - Ingredients
+      summary: Delete an ingredient by ID
+      responses:
+        204:
+          description: Ingredient deleted
+        404:
+          description: Ingredient not found
+
+components:
+  schemas:
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
