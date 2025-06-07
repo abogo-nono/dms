@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Person API
+  description: API endpoints for managing person resources
+  version: 1.0.0
+
+paths:
+  /people:
+    get:
+      summary: Get all persons
+      tags:
+        - Person
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  people:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Person'
+    post:
+      summary: Create a new person
+      tags:
+        - Person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                gender:
+                  type: string
+                age:
+                  type: integer
+              required:
+                - name
+                - gender
+                - age
+      responses:
+        '201':
+          description: Person created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  person:
+                    $ref: '#/components/schemas/Person'
+        '400':
+          description: Name already exists
+
+  /people/{person_id}:
+    parameters:
+      - name: person_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a person by ID
+      tags:
+        - Person
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  person:
+                    $ref: '#/components/schemas/Person'
+        '404':
+          description: Person not found
+    put:
+      summary: Update a person
+      tags:
+        - Person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                gender:
+                  type: string
+                age:
+                  type: integer
+              required:
+                - name
+                - gender
+                - age
+      responses:
+        '201':
+          description: Person updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  person:
+                    $ref: '#/components/schemas/Person'
+        '404':
+          description: Person not found
+    delete:
+      summary: Delete a person
+      tags:
+        - Person
+      responses:
+        '204':
+          description: Person deleted successfully
+        '404':
+          description: Person not found
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+      required:
+        - id
+        - name
+        - gender
+        - age
