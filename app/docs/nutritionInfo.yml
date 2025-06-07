@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: NutritionInfo API
+  version: 1.0.0
+tags:
+  - name: NutritionInfo
+    description: Operations related to nutrition information
+
+paths:
+  /nutrition_info:
+    get:
+      tags:
+        - NutritionInfo
+      summary: List all nutrition info
+      responses:
+        '200':
+          description: A list of nutrition info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NutritionInfo'
+    post:
+      tags:
+        - NutritionInfo
+      summary: Create new nutrition info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NutritionInfoCreate'
+      responses:
+        '201':
+          description: NutritionInfo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionInfo'
+        '400':
+          description: Nutrition information for this food already exists or food does not exist
+
+  /nutrition_info/{nutrition_info_id}:
+    parameters:
+      - name: nutrition_info_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - NutritionInfo
+      summary: Get nutrition info by ID
+      responses:
+        '200':
+          description: NutritionInfo details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionInfo'
+        '404':
+          description: NutritionInfo not found
+    put:
+      tags:
+        - NutritionInfo
+      summary: Update nutrition info by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NutritionInfoCreate'
+      responses:
+        '200':
+          description: NutritionInfo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionInfo'
+        '404':
+          description: NutritionInfo not found or food does not exist
+    delete:
+      tags:
+        - NutritionInfo
+      summary: Delete nutrition info by ID
+      responses:
+        '204':
+          description: NutritionInfo deleted
+        '404':
+          description: NutritionInfo not found
+
+components:
+  schemas:
+    NutritionInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        calories:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        carbohydrates:
+          type: number
+      required:
+        - id
+        - food_id
+        - calories
+        - protein
+        - fat
+        - carbohydrates
+    NutritionInfoCreate:
+      type: object
+      properties:
+        food_id:
+          type: integer
+        calories:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        carbohydrates:
+          type: number
+      required:
+        - food_id
+        - calories
+        - protein
+        - fat
+        - carbohydrates
