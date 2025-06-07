@@ -1,0 +1,228 @@
+openapi: 3.0.0
+info:
+  title: Food API
+  version: 1.0.0
+tags:
+  - name: Foods
+    description: Operations related to food items
+
+paths:
+  /foods:
+    get:
+      tags:
+        - Foods
+      summary: Get list of foods
+      responses:
+        200:
+          description: A list of foods
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  foods:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Food'
+    post:
+      tags:
+        - Foods
+      summary: Add a new food
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+              required:
+                - name
+      responses:
+        201:
+          description: Food created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food:
+                    $ref: '#/components/schemas/Food'
+        400:
+          description: Name is required or food already exists
+
+  /foods/{food_id}:
+    parameters:
+      - name: food_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Foods
+      summary: Get a food by ID
+      responses:
+        200:
+          description: Food details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food:
+                    $ref: '#/components/schemas/Food'
+        404:
+          description: Food not found
+    put:
+      tags:
+        - Foods
+      summary: Update a food by ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Food updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food:
+                    $ref: '#/components/schemas/Food'
+        404:
+          description: Food not found
+    delete:
+      tags:
+        - Foods
+      summary: Delete a food by ID
+      responses:
+        204:
+          description: Food deleted
+        404:
+          description: Food not found
+
+  /foods/{food_id}/calories:
+    parameters:
+      - name: food_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Foods
+      summary: Get calories for a food
+      responses:
+        200:
+          description: Calories information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food:
+                    type: string
+                  calories:
+                    type: number
+        404:
+          description: Food not found or no nutrition info available
+
+  /foods/{food_id}/ingredients:
+    parameters:
+      - name: food_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Foods
+      summary: List ingredients for a food
+      responses:
+        200:
+          description: Food ingredients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food:
+                    type: string
+                  ingredients:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        quantity:
+                          type: string
+        404:
+          description: Food not found or no ingredients available
+
+components:
+  schemas:
+    Food:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        instructions:
+          type: string
+        image_url:
+          type: string
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoodIngredient'
+        nutrition_info:
+          $ref: '#/components/schemas/NutritionInfo'
+    FoodIngredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        ingredient_id:
+          type: integer
+        quantity:
+          type: string
+    NutritionInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        calories:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        carbohydrates:
+          type: number
