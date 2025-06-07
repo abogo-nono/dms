@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: DMS API
+  description: API documentation for DMS Application
+  version: 1.0.0
+
+tags:
+  - name: Person
+    description: Person management
+  - name: Foods
+    description: Food management
+  - name: Ingredients
+    description: Ingredient management
+  - name: FoodIngredients
+    description: Food-Ingredient relationships
+  - name: NutritionInfo
+    description: Nutrition information
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+      required:
+        - id
+        - name
+        - gender
+        - age
+    
+    Food:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        instructions:
+          type: string
+        image_url:
+          type: string
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoodIngredient'
+        nutrition_info:
+          $ref: '#/components/schemas/NutritionInfo'
+      required:
+        - id
+        - name
+
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+
+    FoodIngredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        ingredient_id:
+          type: integer
+        quantity:
+          type: string
+      required:
+        - id
+        - food_id
+        - ingredient_id
+        - quantity
+
+    NutritionInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        calories:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        carbohydrates:
+          type: number
+      required:
+        - id
+        - food_id
+        - calories
+        - protein
+        - fat
+        - carbohydrates
