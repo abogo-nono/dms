@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Food Log API
+  version: 1.0.0
+tags:
+  - name: FoodLog
+    description: Operations related to food logging
+
+paths:
+  /food_log:
+    post:
+      tags:
+        - FoodLog
+      summary: Log food consumed by a person
+      description: Record what a person has eaten
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                person_id:
+                  type: integer
+                food_id:
+                  type: integer
+                notes:
+                  type: string
+              required:
+                - person_id
+                - food_id
+      responses:
+        201:
+          description: Food logged successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  food_log:
+                    $ref: '#/components/schemas/FoodLog'
+                  warning:
+                    type: string
+                    description: Warning about allergies if applicable
+        404:
+          description: Person or food not found
+
+  /people/{person_id}/food_history:
+    parameters:
+      - name: person_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+    get:
+      tags:
+        - FoodLog
+      summary: Get food history for a person
+      description: View what foods a person has consumed over time
+      responses:
+        200:
+          description: History retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  person:
+                    $ref: '#/components/schemas/Person'
+                  logs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FoodLog'
+        404:
+          description: Person not found
+
+components:
+  schemas:
+    FoodLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        person_id:
+          type: integer
+        food_id:
+          type: integer
+        food_name:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        notes:
+          type: string
