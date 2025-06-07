@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: FoodIngredient API
+  version: 1.0.0
+tags:
+  - name: FoodIngredients
+    description: Operations related to food ingredients
+
+paths:
+  /food_ingredients:
+    get:
+      tags:
+        - FoodIngredients
+      summary: Get list of food ingredients
+      responses:
+        200:
+          description: A list of food ingredients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food_ingredients:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FoodIngredient'
+    post:
+      tags:
+        - FoodIngredients
+      summary: Add a new food ingredient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                food_id:
+                  type: integer
+                ingredient_id:
+                  type: integer
+                quantity:
+                  type: string
+              required:
+                - food_id
+                - ingredient_id
+                - quantity
+      responses:
+        201:
+          description: FoodIngredient created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food_ingredient:
+                    $ref: '#/components/schemas/FoodIngredient'
+        400:
+          description: Required fields missing
+
+  /food_ingredients/{food_ingredient_id}:
+    parameters:
+      - name: food_ingredient_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - FoodIngredients
+      summary: Get a food ingredient by ID
+      responses:
+        200:
+          description: FoodIngredient details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food_ingredient:
+                    $ref: '#/components/schemas/FoodIngredient'
+        404:
+          description: FoodIngredient not found
+    put:
+      tags:
+        - FoodIngredients
+      summary: Update a food ingredient by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                food_id:
+                  type: integer
+                ingredient_id:
+                  type: integer
+                quantity:
+                  type: string
+              required:
+                - food_id
+                - ingredient_id
+                - quantity
+      responses:
+        201:
+          description: FoodIngredient updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  food_ingredient:
+                    $ref: '#/components/schemas/FoodIngredient'
+        404:
+          description: FoodIngredient not found
+    delete:
+      tags:
+        - FoodIngredients
+      summary: Delete a food ingredient by ID
+      responses:
+        204:
+          description: FoodIngredient deleted
+        404:
+          description: FoodIngredient not found
+
+components:
+  schemas:
+    FoodIngredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        food_id:
+          type: integer
+        ingredient_id:
+          type: integer
+        quantity:
+          type: string
+      required:
+        - id
+        - food_id
+        - ingredient_id
+        - quantity
