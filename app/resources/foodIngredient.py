@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
-from app.models.foodIngredient import FoodIngredient
-from app import db
 
+from app import db
+from app.models.foodIngredient import FoodIngredient
 
 parser = reqparse.RequestParser()
 parser.add_argument('food_id', type=int, required=True, help='Food ID is required')
